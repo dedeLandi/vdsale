@@ -41,9 +41,41 @@ public class OrderControllerTest extends BasicApplicationTest {
 
         PageVO<OrderVO> data = response.getBody();
 
-        Assert.assertThat(data.getContents(), Matchers.hasSize(1));
+        Assert.assertThat(data.getContents(), Matchers.hasSize(2));
         Assert.assertThat(data.getContents().get(0).getItems(), Matchers.hasSize(1));
         Assert.assertThat(data.getContents().get(0).getItems().get(0).getDisc().getSpotifyId(), Matchers.equalTo("2kiDkXNxuQME25DEUWiNkw"));
+
+    }
+
+    @Test
+    public void testGetOrderListByDate(){
+        ResponseEntity<PageVO<OrderVO>> response = restTemplate.exchange("/order/08-02-2019/12-02-2019",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<PageVO<OrderVO>>() {});
+
+        Assert.assertNotNull(response);
+
+        PageVO<OrderVO> data = response.getBody();
+
+        Assert.assertThat(data.getContents(), Matchers.hasSize(1));
+        Assert.assertThat(data.getContents().get(0).getItems(), Matchers.hasSize(1));
+        Assert.assertThat(data.getContents().get(0).getItems().get(0).getDisc().getSpotifyId(), Matchers.equalTo("2kiDkXNxuQME25DEUWiNkw2"));
+
+    }
+
+    @Test
+    public void testGetOrderListByDateNotFound(){
+        ResponseEntity<PageVO<OrderVO>> response = restTemplate.exchange("/order/01-01-2018/31-01-2018",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<PageVO<OrderVO>>() {});
+
+        Assert.assertNotNull(response);
+
+        PageVO<OrderVO> data = response.getBody();
+
+        Assert.assertThat(data.getContents(), Matchers.hasSize(0));
 
     }
 

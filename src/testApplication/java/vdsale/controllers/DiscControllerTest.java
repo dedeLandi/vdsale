@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.jdbc.Sql;
 import vdsale.BasicApplicationTest;
@@ -39,8 +40,83 @@ public class DiscControllerTest extends BasicApplicationTest {
 
         PageVO<DiscVO> data = response.getBody();
 
-        Assert.assertThat(data.getContents(), Matchers.hasSize(1));
+        Assert.assertThat(data.getContents(), Matchers.hasSize(3));
 
+    }
+
+    @Test
+    public void testGetDiscListByCategory(){
+        ResponseEntity<PageVO<DiscVO>> response = restTemplate.exchange("/disc/category/brazilian",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<PageVO<DiscVO>>() {});
+
+        Assert.assertNotNull(response);
+
+        PageVO<DiscVO> data = response.getBody();
+
+        Assert.assertThat(data.getContents(), Matchers.hasSize(2));
+
+    }
+
+    @Test
+    public void testGetDiscListByCategoryNotFound(){
+        ResponseEntity<PageVO<DiscVO>> response = restTemplate.exchange("/disc/category/rock",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<PageVO<DiscVO>>() {});
+
+        Assert.assertNotNull(response);
+
+        PageVO<DiscVO> data = response.getBody();
+
+        Assert.assertThat(data.getContents(), Matchers.hasSize(0));
+
+    }
+
+    @Test
+    public void testGet(){
+        int discId = 1;
+        ResponseEntity<DiscVO> response = restTemplate.exchange("/disc/" + discId, HttpMethod.GET, null, DiscVO.class);
+
+        Assert.assertNotNull(response);
+
+        var disc = response.getBody();
+
+        Assert.assertNotNull(disc);
+
+        Assert.assertThat(disc.getSpotifyId(), Matchers.equalTo("2kiDkXNxuQME25DEUWiNkw"));
+        Assert.assertThat(disc.getName(), Matchers.equalTo("O Papa É Pop"));
+    }
+
+    @Test
+    public void testGetNotFound() {
+        ResponseEntity<HttpStatus> response = restTemplate.exchange("/disc/"+99, HttpMethod.GET, null, HttpStatus.class);
+
+        Assert.assertNotNull(response);
+        Assert.assertThat(response.getStatusCode(), Matchers.equalTo(HttpStatus.NOT_FOUND));
+    }
+
+    @Test
+    public void testGetSpotifyId(){
+        ResponseEntity<DiscVO> response = restTemplate.exchange("/disc/spotify/2kiDkXNxuQME25DEUWiNkw3", HttpMethod.GET, null, DiscVO.class);
+
+        Assert.assertNotNull(response);
+
+        var disc = response.getBody();
+
+        Assert.assertNotNull(disc);
+
+        Assert.assertThat(disc.getId(), Matchers.equalTo(3));
+        Assert.assertThat(disc.getName(), Matchers.equalTo("O Papa É Pop 3"));
+    }
+
+    @Test
+    public void testGetSpotifyIdNotFound() {
+        ResponseEntity<HttpStatus> response = restTemplate.exchange("/disc/spotify/test", HttpMethod.GET, null, HttpStatus.class);
+
+        Assert.assertNotNull(response);
+        Assert.assertThat(response.getStatusCode(), Matchers.equalTo(HttpStatus.NOT_FOUND));
     }
 
     @Test
@@ -71,7 +147,7 @@ public class DiscControllerTest extends BasicApplicationTest {
         List<DiscEntity> allEntities = discRepository.findAll();
 
         Assert.assertNotNull(allEntities);
-        Assert.assertThat(allEntities, Matchers.hasSize(198));
+        Assert.assertThat(allEntities.size(), Matchers.greaterThan(198));
     }
 
 

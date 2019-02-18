@@ -21,6 +21,7 @@ public class CategoryController {
 
     protected static final String REQUEST_MAPPING = "/category";
     private static final String REQUEST_MAPPING_SPOTIFY = "/spotify";
+//    private static final String REQUEST_MAPPING_SPOTIFY2 = "/spotify2";
     private static final String REQUEST_MAPPING_SPOTIFY_IMPORT = "/spotify/import";
 
     @Autowired
@@ -32,6 +33,11 @@ public class CategoryController {
             @RequestParam(value = "offset", defaultValue = "0") int offset ){
         return ResponseEntity.status(HttpStatus.OK).body(categoryFacade.getAllSpotify(size, offset));
     }
+
+//    @GetMapping(REQUEST_MAPPING_SPOTIFY2)
+//    public ResponseEntity getAllGenre(){
+//        return ResponseEntity.status(HttpStatus.OK).body(categoryFacade.getAllGenre());
+//    }
 
 
     @PostMapping(REQUEST_MAPPING_SPOTIFY_IMPORT)
@@ -46,10 +52,6 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity<PageVO<CategoryVO>> getAll(final Pageable pageRequest) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(categoryFacade.getAll(pageRequest));
-        } catch (Exception e) {
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(categoryFacade.getAll(pageRequest));
     }
 }

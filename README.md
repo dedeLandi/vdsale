@@ -48,7 +48,7 @@ The system runs in port 9000 (http://localhost:9000).
 
 ### Tests
 
-The project have two type of tests configured:
+The current project coverage is around 98% of classes and 81% of lines, it have two type of tests configured:
 
 1. UnitTests - run with the command `gradlew.bat test`
 2. ApplicationTests - - run with the command `gradlew.bat testApplication` 
@@ -77,6 +77,7 @@ For the tests of the project we have the following todo list:
 2. Create new unit tests
 3. Create new application tests
 4. Create integration tests
+5. Improve the test coverage (mainly in unit tests)
 
 ## Module information
 

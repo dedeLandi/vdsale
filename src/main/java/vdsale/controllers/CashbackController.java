@@ -38,11 +38,7 @@ public class CashbackController {
 
     @GetMapping
     public ResponseEntity getAll(final Pageable pageRequest) {
-        try {
-            return ResponseEntity.status(HttpStatus.OK).body(cashbackFacade.getAll(pageRequest));
-        } catch (Exception e) {
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(cashbackFacade.getAll(pageRequest));
     }
 
     @GetMapping(REQUEST_GET_CASHBACK)

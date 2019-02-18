@@ -93,6 +93,33 @@ public class PersonControllerTest extends BasicApplicationTest {
     }
 
     @Test
+    public void testUpdatePerson(){
+        PersonVO vo = createPerson("Test");
+        HttpEntity<?> request = new HttpEntity<>(vo);
+
+        ResponseEntity<PersonVO> response = restTemplate.exchange("/person", HttpMethod.POST, request, PersonVO.class);
+
+        Assert.assertNotNull(response);
+
+        PersonVO responseData = response.getBody();
+
+        Assert.assertNotNull(responseData);
+
+        responseData.setName("Test Update");
+        HttpEntity<?> requestUpdate = new HttpEntity<>(responseData);
+
+        ResponseEntity<PersonVO> responseUpdate = restTemplate.exchange("/person", HttpMethod.PUT, requestUpdate, PersonVO.class);
+
+        PersonVO responseDataUpdate = responseUpdate.getBody();
+
+        final var entity = personRepository.findById(responseDataUpdate.getId());
+
+        Assert.assertNotNull(entity.get());
+        Assert.assertEquals(entity.get().getName(), "Test Update");
+
+    }
+
+    @Test
     public void testDeletePerson(){
         int id = savePerson();
         ResponseEntity<Integer> response = restTemplate.exchange("/person/"+id, HttpMethod.DELETE, null, Integer.class);

@@ -10,6 +10,7 @@ import com.wrapper.spotify.model_objects.specification.Paging;
 import com.wrapper.spotify.model_objects.specification.PlaylistSimplified;
 import com.wrapper.spotify.requests.data.browse.GetCategorysPlaylistsRequest;
 import com.wrapper.spotify.requests.data.browse.GetListOfCategoriesRequest;
+import com.wrapper.spotify.requests.data.browse.miscellaneous.GetAvailableGenreSeedsRequest;
 import com.wrapper.spotify.requests.data.search.SearchItemRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,4 +105,21 @@ public class SpotifyRestService {
         log.info("M=getSpotifyAlbums, message=Not Found spotify albums");
         return null;
     }
+
+    public String[] getSpotifyGenre() {
+        log.info("M=getSpotifyGenre, message=Getting spotify genre");
+        try {
+            final GetAvailableGenreSeedsRequest getAvailableGenreSeedsRequest = spotifyApi.getAvailableGenreSeeds().build();;
+            return getAvailableGenreSeedsRequest.execute();
+
+        } catch (IOException e) {
+            log.error("M=getSpotifyGenre, message=Unexpected IO error getting spotify genre", e);
+        } catch (SpotifyWebApiException e) {
+            log.error("M=getSpotifyGenre, message=Unexpected API error getting spotify genre", e);
+        }
+        log.info("M=getSpotifyGenre, message=Not Found spotify genre");
+        return null;
+    }
+
+
 }

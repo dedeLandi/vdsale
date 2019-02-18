@@ -33,6 +33,11 @@ public class CategoryFacade {
         return spotifyRestService.getSpotifyCategories(size, offset);
     }
 
+//    public String[] getAllGenre() {
+//        log.info("M=getAllGenre, message=Getting spotify genre");
+//        return spotifyRestService.getSpotifyGenre();
+//    }
+
     public Integer importCategoriesFromSpotify() {
         log.info("M=importCategoriesFromSpotify, message=Importing spotify categories");
 
