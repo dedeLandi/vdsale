@@ -1,0 +1,15 @@
+logs/
+
+*.git.bkp
+
+#Intellij
+*.iml
+.idea/
+*.orig
+out/
+
+#Gradlew
+/.gradle/
+*gradle/
+build/
+classes/
